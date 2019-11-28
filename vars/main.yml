@@ -1,0 +1,6 @@
+repository: https://github.com/stumpwm/stumpwm.git
+repository_contrib: https://github.com/stumpwm/stumpwm-contrib.git
+working_dir: /usr/local/src/stumpwm
+working_dir_contrib: /usr/local/src/stumpwm-contrib
+builder_user: builder
+builder_group: builder

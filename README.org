@@ -1,0 +1,61 @@
+#+TITLE: StumpWM Installation Ansible Role
+
+* WARNING
+  :PROPERTIES:
+  :ID:       4ff7444d-0f05-47c7-a7ed-dd20caef6f0c
+  :END:
+  Do not rely on the code blindly, it as not been tested yet.
+* Introduction
+  :PROPERTIES:
+  :ID:       8d155b05-4cd0-46cb-b321-deb33c4a3128
+  :END:
+  This Ansible role allows to install or update an existing StumpWM
+  application.
+
+  This role expects:
+  - All stumpwm dependencies to be present on the system.
+  - The =builder_user= and =builder_group= to be setup correctly on
+    the target.
+  - The target to have an access to the repositories containing the
+    sources of StumpWm and its contributions repository.
+* Installation
+  :PROPERTIES:
+  :ID:       cf3ebfbf-8a49-4a1d-8baa-d54e5fa6276f
+  :END:
+  Add this repository as a role directory inside an existing ansible
+  project.
+* Usage
+  :PROPERTIES:
+  :ID:       08a79ef9-17ef-4e47-9f26-b60611e6ba68
+  :END:
+  The following variables can be overloaded in your playbook:
+  - =repository=, the repository of StumpWM. [Default:
+    [[https://github.com/stumpwm/stumpwm.git]]]
+  - =repository_contrib=, the repository of StumpWM contribs. [Default:
+    [[https://github.com/stumpwm/stumpwm-contrib.git]]]
+  - =working_dir=, the working directory where to clone the
+    repository. [Default: /usr/local/src/stumpwm]
+  - =working_dir_contrib=, the working directory where to clone the
+    repository of contribs. [Default: /usr/local/src/stumpwm-contrib]
+  - =builder_user=: The user to impersonate to build the application. [Default: builder].
+  - =builder_group=: The primary group of the user to impersonate to
+    build the application. [Default: builder].
+
+  The role is to be execute as the root user on the target hosts.
+** Example playbook
+   :PROPERTIES:
+   :ID:       dd28ff5c-cb3a-462b-b259-f471e6892b96
+   :END:
+   #+begin_example
+     ---
+     - host: all
+       gather_facts: False
+       tasks:
+         - name: Deploy mu
+           include_role:
+             name: stumpwm
+           vars:
+             repository: https://github.com/montaropdf/my-stumpwm-fork.git
+             repository_contrib: https://github.com/montaropdf/my-stumpwm-contrib-fork.git
+             working_dir: /var/lib/src/git_repos/stump
+   #+end_example

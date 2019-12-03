@@ -13,10 +13,35 @@
     repo: "{{ repository }}"
     dest: "{{ working_dir }}"
     version: 'HEAD'
-  notify:
-    - Set permission on StumpWM working directory
-    - Build StumpWM
-    - Install StumpWM
+- name: Set working directory ownership
+  file:
+    path: "{{ working_dir }}"
+    state: directory
+    recurse: True
+    owner: "{{ builder_user }}"
+    group: "{{ builder_group }}"
+- name: Build StumpWM
+  block:
+    - name: Install Common Lisp dependencies
+      command: sbcl --disable-debugger --eval "(progn (ql:quickload \"clx\") (ql:quickload \"cl-ppcre\") (ql:quickload \"alexandria\") (exit))"
+    - name: Build configure script
+      command: './autogen.sh'
+      args:
+        chdir: "{{ working_dir }}"
+    - name: Configure StumpWM
+      command: './configure'
+      args:
+        chdir: "{{ working_dir }}"
+    - name: Compile StumpWM
+      command: 'make'
+      args:
+        chdir: "{{ working_dir }}"
+  become: True
+  become_user: "{{ builder_user }}"
+- name: Install StumpWM
+  command: 'make install'
+  args:
+    chdir: "{{ working_dir }}"
 - name: Install StumpWM Contributions
   git:
     repo: "{{ repository_contrib }}"

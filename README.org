@@ -1,4 +1,4 @@
-#+TITLE: StumpWM Installation Ansible Role
+#+TITLE: Ansible Role for StumpWM Installation
 
 * WARNING
   :PROPERTIES:
@@ -9,11 +9,11 @@
   :PROPERTIES:
   :ID:       8d155b05-4cd0-46cb-b321-deb33c4a3128
   :END:
-  This Ansible role allows to install or update an existing StumpWM
+  This Ansible role allows to install or update the StumpWM
   application.
 
   This role expects:
-  - All stumpwm dependencies to be present on the system.
+  - All StumpWM dependencies to be present on the system.
   - The =builder_user= and =builder_group= to be setup correctly on
     the target.
   - The target to have an access to the repositories containing the
@@ -34,14 +34,15 @@
   - =repository_contrib=, the repository of StumpWM contribs. [Default:
     [[https://github.com/stumpwm/stumpwm-contrib.git]]]
   - =working_dir=, the working directory where to clone the
-    repository. [Default: /usr/local/src/stumpwm]
+    repository. [Default: =/usr/local/src/stumpwm= ]
   - =working_dir_contrib=, the working directory where to clone the
-    repository of contribs. [Default: /usr/local/src/stumpwm-contrib]
-  - =builder_user=: The user to impersonate to build the application. [Default: builder].
+    repository of contribs. [Default: =/usr/local/src/stumpwm-contrib= ]
+  - =builder_user=: The user to impersonate to build the
+    application. [Default: =builder= ].
   - =builder_group=: The primary group of the user to impersonate to
-    build the application. [Default: builder].
+    build the application. [Default: =builder= ].
 
-  The role is to be execute as the root user on the target hosts.
+  The role is to be executed as the root user on the target hosts.
 ** Example playbook
    :PROPERTIES:
    :ID:       dd28ff5c-cb3a-462b-b259-f471e6892b96
@@ -49,6 +50,7 @@
    #+begin_example
      ---
      - host: all
+       connection: local
        gather_facts: False
        tasks:
          - name: Deploy StumpWM

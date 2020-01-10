@@ -1,4 +1,4 @@
-- name: Ensure the target working directory is empty
+- name: Ensure the target working directory for StumpWM is empty
   block:
     - name: Remove current working directory
       file:
@@ -16,6 +16,28 @@
 - name: Set working directory ownership
   file:
     path: "{{ working_dir }}"
+    state: directory
+    recurse: True
+    owner: "{{ builder_user }}"
+    group: "{{ builder_group }}"
+- name: Ensure the target working directory for StumpWM Contributions is empty
+  block:
+    - name: Remove current working directory
+      file:
+        path: "{{ working_dir_contrib }}"
+        state: absent
+    - name: Create working directory
+      file:
+        path: "{{ working_dir_contrib }}"
+        state: directory
+- name: Download StumpWM Contributions
+  git:
+    repo: "{{ repository_contrib }}"
+    dest: "{{ working_dir_contrib }}"
+    version: 'HEAD'
+- name: Set working directory ownership for StumpWM Contributions
+  file:
+    path: "{{ working_dir_contrib }}"
     state: directory
     recurse: True
     owner: "{{ builder_user }}"
@@ -42,8 +64,3 @@
   command: 'make install'
   args:
     chdir: "{{ working_dir }}"
-- name: Install StumpWM Contributions
-  git:
-    repo: "{{ repository_contrib }}"
-    dest: "{{ working_dir_contrib }}"
-    version: 'HEAD'

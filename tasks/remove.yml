@@ -1,0 +1,12 @@
+- name: Remove StumpWM
+  command: 'make remove'
+  args:
+    chdir: "{{ working_dir }}"
+- name: Remove StumpWM source directory
+  file:
+    path: "{{ working_dir }}"
+    state: absent
+- name: Remove StumpWM Contrib source directory
+  file:
+    path: "{{ working_dir_contrib }}"
+    state: absent
